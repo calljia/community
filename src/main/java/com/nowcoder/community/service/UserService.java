@@ -49,7 +49,7 @@ public class UserService implements CommunityConstant {
 
         // 空值处理
         if (user == null) {
-            throw new IllegalArgumentException("参数不能为空");
+            throw new IllegalArgumentException("参数不能为空!");
         }
         if (StringUtils.isBlank(user.getUsername())) {
             map.put("usernameMsg", "账号不能为空!");
@@ -78,13 +78,13 @@ public class UserService implements CommunityConstant {
             return map;
         }
 
-        //注册用户
+        // 注册用户
         user.setSalt(CommunityUtil.generateUUID().substring(0, 5));
         user.setPassword(CommunityUtil.md5(user.getPassword() + user.getSalt()));
         user.setType(0);
         user.setStatus(0);
         user.setActivationCode(CommunityUtil.generateUUID());
-        user.setHeaderUrl(String.format("https://images.nowcoder.com/head/%dt.png", new Random().nextInt(1000)));
+        user.setHeaderUrl(String.format("http://images.nowcoder.com/head/%dt.png", new Random().nextInt(1000)));
         user.setCreateTime(new Date());
         userMapper.insertUser(user);
 
@@ -112,39 +112,40 @@ public class UserService implements CommunityConstant {
         }
     }
 
-    public Map<String , Object> login(String username, String password, int expiredSeconds) {
-        HashMap<String, Object> map= new HashMap<>();
+    public Map<String, Object> login(String username, String password, int expiredSeconds) {
+        Map<String, Object> map = new HashMap<>();
 
         // 空值处理
         if (StringUtils.isBlank(username)) {
-            map.put("usernameMsg", "账号不能为空！");
+            map.put("usernameMsg", "账号不能为空!");
             return map;
         }
         if (StringUtils.isBlank(password)) {
-            map.put("passwordMsg", "密码不能为空！");
+            map.put("passwordMsg", "密码不能为空!");
             return map;
         }
 
         // 验证账号
         User user = userMapper.selectByName(username);
         if (user == null) {
-            map.put("usernameMsg", "该账号不存在！");
+            map.put("usernameMsg", "该账号不存在!");
             return map;
         }
 
         // 验证状态
         if (user.getStatus() == 0) {
-            map.put("usernameMsg", "该账号未激活！");
+            map.put("usernameMsg", "该账号未激活!");
+            return map;
         }
 
         // 验证密码
         password = CommunityUtil.md5(password + user.getSalt());
         if (!user.getPassword().equals(password)) {
-            map.put("passwordMsg", "密码不正确！");
+            map.put("passwordMsg", "密码不正确!");
             return map;
         }
 
-        //生成登录凭证
+        // 生成登录凭证
         LoginTicket loginTicket = new LoginTicket();
         loginTicket.setUserId(user.getId());
         loginTicket.setTicket(CommunityUtil.generateUUID());
@@ -167,6 +168,5 @@ public class UserService implements CommunityConstant {
     public int updateHeader(int userId, String headerUrl) {
         return userMapper.updateHeader(userId, headerUrl);
     }
-
 
 }

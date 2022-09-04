@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FileInputStream;
@@ -54,15 +53,15 @@ public class UserController {
     @LoginRequired
     @RequestMapping(path = "/upload", method = RequestMethod.POST)
     public String uploadHeader(MultipartFile headerImage, Model model) {
-        if (headerImage == null){
-            model.addAttribute("error", "您还没有选择图片！");
+        if (headerImage == null) {
+            model.addAttribute("error", "您还没有选择图片!");
             return "/site/setting";
         }
 
         String fileName = headerImage.getOriginalFilename();
         String suffix = fileName.substring(fileName.lastIndexOf("."));
         if (StringUtils.isBlank(suffix)) {
-            model.addAttribute("error", "文件的格式不正确！");
+            model.addAttribute("error", "文件的格式不正确!");
             return "/site/setting";
         }
 
@@ -74,8 +73,8 @@ public class UserController {
             // 存储文件
             headerImage.transferTo(dest);
         } catch (IOException e) {
-            logger.error("上传文件失败：" + e.getMessage());
-            throw new RuntimeException("上传文件失败，服务器发生异常！", e);
+            logger.error("上传文件失败: " + e.getMessage());
+            throw new RuntimeException("上传文件失败,服务器发生异常!", e);
         }
 
         // 更新当前用户的头像的路径(web访问路径)
@@ -96,19 +95,17 @@ public class UserController {
         // 响应图片
         response.setContentType("image/" + suffix);
         try (
-                OutputStream os = response.getOutputStream();
                 FileInputStream fis = new FileInputStream(fileName);
+                OutputStream os = response.getOutputStream();
         ) {
-
             byte[] buffer = new byte[1024];
             int b = 0;
             while ((b = fis.read(buffer)) != -1) {
                 os.write(buffer, 0, b);
             }
         } catch (IOException e) {
-            logger.error("读取头像失败：" + e.getMessage());
+            logger.error("读取头像失败: " + e.getMessage());
         }
-
     }
 
 }

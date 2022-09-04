@@ -18,17 +18,17 @@ public class DiscussPostService {
     @Autowired
     private SensitiveFilter sensitiveFilter;
 
-    public List<DiscussPost> findDiscussPosts(int userId, int offset, int limit){
+    public List<DiscussPost> findDiscussPosts(int userId, int offset, int limit) {
         return discussPostMapper.selectDiscussPosts(userId, offset, limit);
     }
 
-    public int findDiscussPostRows(int userId){
+    public int findDiscussPostRows(int userId) {
         return discussPostMapper.selectDiscussPostRows(userId);
     }
 
     public int addDiscussPost(DiscussPost post) {
         if (post == null) {
-            throw new IllegalArgumentException("参数不能为空！");
+            throw new IllegalArgumentException("参数不能为空!");
         }
 
         // 转义HTML标记
@@ -44,4 +44,9 @@ public class DiscussPostService {
     public DiscussPost findDiscussPostById(int id) {
         return discussPostMapper.selectDiscussPostById(id);
     }
+
+    public int updateCommentCount(int id, int commentCount) {
+        return discussPostMapper.updateCommentCount(id, commentCount);
+    }
+
 }

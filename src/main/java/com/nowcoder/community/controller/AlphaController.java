@@ -26,20 +26,18 @@ public class AlphaController {
     @RequestMapping("/hello")
     @ResponseBody
     public String sayHello() {
-        return "Hello Spring Boot";
+        return "Hello Spring Boot.";
     }
 
     @RequestMapping("/data")
     @ResponseBody
-    public String getData(){
+    public String getData() {
         return alphaService.find();
     }
 
-
-
     @RequestMapping("/http")
     public void http(HttpServletRequest request, HttpServletResponse response) {
-        //获取请求数据
+        // 获取请求数据
         System.out.println(request.getMethod());
         System.out.println(request.getServletPath());
         Enumeration<String> enumeration = request.getHeaderNames();
@@ -61,19 +59,18 @@ public class AlphaController {
         }
     }
 
-    // Get请求
+    // GET请求
 
     // /students?current=1&limit=20
     @RequestMapping(path = "/students", method = RequestMethod.GET)
     @ResponseBody
     public String getStudents(
             @RequestParam(name = "current", required = false, defaultValue = "1") int current,
-            @RequestParam(name = "limit", required = false, defaultValue = "10") int limit){
+            @RequestParam(name = "limit", required = false, defaultValue = "10") int limit) {
         System.out.println(current);
         System.out.println(limit);
         return "some students";
     }
-
 
     // /student/123
     @RequestMapping(path = "/student/{id}", method = RequestMethod.GET)
@@ -106,8 +103,7 @@ public class AlphaController {
     @RequestMapping(path = "/school", method = RequestMethod.GET)
     public String getSchool(Model model) {
         model.addAttribute("name", "北京大学");
-        model.addAttribute("age", 10);
-
+        model.addAttribute("age", 80);
         return "/demo/view";
     }
 
@@ -124,22 +120,24 @@ public class AlphaController {
         return emp;
     }
 
-
     @RequestMapping(path = "/emps", method = RequestMethod.GET)
     @ResponseBody
     public List<Map<String, Object>> getEmps() {
         List<Map<String, Object>> list = new ArrayList<>();
+
         Map<String, Object> emp = new HashMap<>();
         emp.put("name", "张三");
         emp.put("age", 23);
         emp.put("salary", 8000.00);
         list.add(emp);
 
+        emp = new HashMap<>();
         emp.put("name", "李四");
         emp.put("age", 24);
         emp.put("salary", 9000.00);
         list.add(emp);
 
+        emp = new HashMap<>();
         emp.put("name", "王五");
         emp.put("age", 25);
         emp.put("salary", 10000.00);
@@ -147,7 +145,6 @@ public class AlphaController {
 
         return list;
     }
-
 
     // cookie示例
 
@@ -173,7 +170,8 @@ public class AlphaController {
         return "get cookie";
     }
 
-    // session 示例
+    // session示例
+
     @RequestMapping(path = "/session/set", method = RequestMethod.GET)
     @ResponseBody
     public String setSession(HttpSession session) {
@@ -196,14 +194,7 @@ public class AlphaController {
     public String testAjax(String name, int age) {
         System.out.println(name);
         System.out.println(age);
-        return CommunityUtil.getJSONString(0, "操作成功");
+        return CommunityUtil.getJSONString(0, "操作成功!");
     }
-
-
-
-
-
-
-
 
 }

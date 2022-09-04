@@ -69,10 +69,10 @@ public class DiscussPostController implements CommunityConstant {
         page.setPath("/discuss/detail/" + discussPostId);
         page.setRows(post.getCommentCount());
 
-        // 评论：给帖子的评论
-        // 恢复：给评论的回复
-        // 评论的列表
-        List<Comment> commentList = commentService.findCommentByEntity(
+        // 评论: 给帖子的评论
+        // 回复: 给评论的评论
+        // 评论列表
+        List<Comment> commentList = commentService.findCommentsByEntity(
                 ENTITY_TYPE_POST, post.getId(), page.getOffset(), page.getLimit());
         // 评论VO列表
         List<Map<String, Object>> commentVoList = new ArrayList<>();
@@ -86,7 +86,7 @@ public class DiscussPostController implements CommunityConstant {
                 commentVo.put("user", userService.findUserById(comment.getUserId()));
 
                 // 回复列表
-                List<Comment> replyList = commentService.findCommentByEntity(
+                List<Comment> replyList = commentService.findCommentsByEntity(
                         ENTITY_TYPE_COMMENT, comment.getId(), 0, Integer.MAX_VALUE);
                 // 回复VO列表
                 List<Map<String, Object>> replyVoList = new ArrayList<>();
@@ -100,6 +100,7 @@ public class DiscussPostController implements CommunityConstant {
                         // 回复目标
                         User target = reply.getTargetId() == 0 ? null : userService.findUserById(reply.getTargetId());
                         replyVo.put("target", target);
+
                         replyVoList.add(replyVo);
                     }
                 }
@@ -115,9 +116,7 @@ public class DiscussPostController implements CommunityConstant {
 
         model.addAttribute("comments", commentVoList);
 
-
         return "/site/discuss-detail";
     }
-
 
 }
